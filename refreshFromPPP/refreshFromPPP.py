@@ -13,23 +13,42 @@ class RefreshFromPPP():
         self.conn = psycopg2.connect("host='localhost' port='5432' dbname='pto_controle' user='postgres' password='postgres'")
 
     def readPPP(self):
+        # Possibility : update the timestamp of measure's beginning from PPP and orbita(has domain)
         files = [x for x in self.folder.rglob('*.pdf') if '6_Processamento_PPP' in x.parts]
         for item in files:
              with item.open(mode='rb') as pdffile:
+                point = {}
                 read_pdf = PyPDF2.PdfFileReader(pdffile)
                 page = read_pdf.getPage(0)
                 page_content = page.extractText()
                 page_pdf = page_content.replace('\n', '')
-                aElip, n, e = re.findall(
+                point['altitude_geometrica'], point['norte'], point['este'] = re.findall(
                     r'([0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
-                point = re.findall(r'domarco:(.+)Início', page_pdf)[0]
-                self.updateDB(point, n, e, aElip.replace(',', '.'))
+                point['altitude_geometrica'] = point['altitude_geometrica'].replace(',', '.')
+                point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(.{1,7})Precis', page_pdf)[0].replace(',', '.')
+                point['cod_ponto'] = re.findall(r'domarco:(.+)Início', page_pdf)[0]
+                point['orbita'] = re.findall(r'dossatélites:\d(\w+)Frequ', page_pdf)[0].capitalize()
+                point['freq_processada'] = re.findall(r'Frequênciaprocessada:(\w+)Interva', page_pdf)[0]
+                point['data_processamento'] = re.findall(r'Processadoem:(\d\d/\d\d/\d\d\d\d)', page_pdf)[0]
+                lat, lon = re.findall(r'levantamento5(.{2,3}°.{2}´.{7}).(.{2,3}°.{2}´.{7})', page_pdf)[0]
+                point['latitude'], point['longitude'] = self.evaluateCoords(lat, lon)
+                print(point)
+                self.updateDB(point)
 
-    def updateDB(self, point, n, e, aElip):
+    def updateDB(self, point):
         with self.conn.cursor() as cursor:
             cursor.execute(u'''
             UPDATE bpc.ponto_controle_p
-            SET n='{0}', e='{1}', aElip='{2}'
-            WHERE cod_ponto='{3}'
-            '''.format(n, e, aElip, point))
-            return cursor.commit()
+            SET norte='{norte}', este='{este}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
+            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}'
+            WHERE cod_ponto='{cod_ponto}'
+            '''.format(**point))
+            self.conn.commit()
+    
+    @staticmethod
+    def evaluateCoords(lat, lon):
+        lat_deg, lat_min, lat_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lat)[0]
+        new_lat = float(lat_deg) + float(lat_min)/60 + float(lat_seg.replace(',', '.'))/3600
+        lon_deg, lon_min, lon_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lon)[0]
+        new_lon = float(lon_deg) + float(lon_min)/60 + float(lon_seg.replace(',', '.'))/3600
+        return new_lat, new_lon
