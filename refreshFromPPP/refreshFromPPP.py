@@ -29,7 +29,8 @@ class RefreshFromPPP():
                 point['cod_ponto'] = re.findall(r'domarco:(.+)Início', page_pdf)[0]
                 point['orbita'] = re.findall(r'dossatélites:\d(\w+)Frequ', page_pdf)[0].capitalize()
                 point['freq_processada'] = re.findall(r'Frequênciaprocessada:(\w+)Interva', page_pdf)[0]
-                point['data_processamento'] = re.findall(r'Processadoem:(\d\d/\d\d/\d\d\d\d)', page_pdf)[0]
+                data = re.findall(r'Processadoem:(\d\d/\d\d/\d\d\d\d)', page_pdf)[0]
+                point['data_processamento'] = datetime.strptime(data, '%d/%m/%Y')
                 lat, lon = re.findall(r'levantamento5(.{2,3}°.{2}´.{7}).(.{2,3}°.{2}´.{7})', page_pdf)[0]
                 point['latitude'], point['longitude'] = self.evaluateCoords(lat, lon)
                 print(point)
@@ -40,7 +41,8 @@ class RefreshFromPPP():
             cursor.execute(u'''
             UPDATE bpc.ponto_controle_p
             SET norte='{norte}', este='{este}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
-            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({latitude} {longitude})', 4674)
+            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({latitude} {longitude})', 4674),
+            data_processamento='{data_processamento}'
             WHERE cod_ponto='{cod_ponto}'
             '''.format(**point))
             self.conn.commit()

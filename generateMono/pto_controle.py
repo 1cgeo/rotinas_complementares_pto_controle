@@ -75,41 +75,23 @@ class GenerateMonograpy():
     def executeProcess(self, folder):
         pto = self.fetchOne(folder.name)
         print(pto)
-        # if '3 Sgt' or '2 Sgt' or '1 Sgt' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace(' Sgt', u'° Sgt')
-
-        ######### FIX NAMES ###############
-        # if 'Joao' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Joao', u'João')
-        # if 'Glenio' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Glenio', u'Glênio')
-        # if 'Mendonca' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Mendonca', u'Mendonça')
-        # if 'Marcio' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Marcio', u'Márcio')
-        # if 'Andre' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Andre', u'André')
-        # if 'Cesar' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Cesar', u'César')
-        # if 'Aurelio' in pto['medidor']:
-        #     pto['medidor'] = pto['medidor'].replace('Aurelio', u'Aurélio')
 
         pto['dataMono'] = date.today()
         pto['freq'] = pto['freq_processada']
-        pto['chCampoCREA'] = u'RS231681'
         # por algum bug na secretary durante a inserção das imagens é necessário duas imagens idênticas
         pto['signature'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
         pto['signature1'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
         pto['signature2'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
         pto['signature3'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
-        pto['n'] = 'mops'
-        pto['e'] = 'mops'
-        pto['fuso'] = 'mops'
-        pto['mc'] = 'mops'
+        pto['mc'] = pto['meridiano_central']
+        pto['mascara'] = pto['mascara_elevacao']
+        pto['taxa'] = pto['taxa_gravacao']
         pto['sigmaXY'] = u'0,11'
         pto['sigmaZ'] = u'0,18'
         pto['isGrounded'] = 'teste'
         pto['durRast'] = pto["fim_rastreio"] - pto["inicio_rastreio"]
+        pto['inicio_rastreio'] = pto['inicio_rastreio'].strftime('%d/%m/%Y %H:%M:%S')
+        pto['data_processamento'] = pto['data_processamento'].strftime('%d/%m/%Y')
 
         # Fotos do ponto
         photosPt = [str(f) for f in Path(folder / '3_Foto_Rastreio').iterdir() if f.match('*.jpg')]
@@ -118,18 +100,11 @@ class GenerateMonograpy():
         pto['photoPt3'] = photosPt[2]
         pto['photoPt4'] = photosPt[3]
 
+        # Need to generate aerial views
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
         pto['photoAerView'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
         pto['photoView1'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
         pto['photoView2'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-
-        # # Foto vista aerea
-        # pto['photoAerView'] = 'C:\\Users\\eliton.1CGEO\\Desktop\\aer_view\\' + \
-        #     pto['nome'] + '_aerView.png'
-        # pto['photoView1'] = 'C:\\Users\\eliton.1CGEO\\Desktop\\imagens_view\\Nova Pasta\\' + \
-        #     pto['nome'] + '_view1.png'
-        # pto['photoView2'] = 'C:\\Users\\eliton.1CGEO\\Desktop\\imagens_view\\' + \
-        #     pto['nome'] + '_view2.png'
 
         # print pto['nome']
 
@@ -137,7 +112,7 @@ class GenerateMonograpy():
 
         # Path do template
         result = engine.render(
-            template='C:\\Users\\Eliton\Documents\\ferramentas_pto_controle_2\\modelo2.odt', pto=pto)
+            template='C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\modelo2.odt', pto=pto)
 
-        # output = open('C:\\Users\\Eliton\Documents\\ferramentas_pto_controle_2\\generateMono\\results\\{}.odt'.format(pto['cod_ponto']), 'wb')
-        # output.write(result)
+        with open('C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\results\\{}.odt'.format(pto['cod_ponto']), 'wb') as output:
+          output.write(result)
