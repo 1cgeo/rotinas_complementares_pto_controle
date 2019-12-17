@@ -40,7 +40,7 @@ class RefreshFromPPP():
             cursor.execute(u'''
             UPDATE bpc.ponto_controle_p
             SET norte='{norte}', este='{este}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
-            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}'
+            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({latitude} {longitude})', 4674)
             WHERE cod_ponto='{cod_ponto}'
             '''.format(**point))
             self.conn.commit()

@@ -139,5 +139,5 @@ class GenerateMonograpy():
         result = engine.render(
             template='C:\\Users\\Eliton\Documents\\ferramentas_pto_controle_2\\modelo2.odt', pto=pto)
 
-        output = open('C:\\Users\\Eliton\Documents\\ferramentas_pto_controle_2\\generateMono\\results\\{}.odt'.format(pto['cod_ponto']), 'wb')
-        output.write(result)
+        # output = open('C:\\Users\\Eliton\Documents\\ferramentas_pto_controle_2\\generateMono\\results\\{}.odt'.format(pto['cod_ponto']), 'wb')
+        # output.write(result)
