@@ -8,6 +8,7 @@ Rotinas disponíveis neste repositório:
 
 ## Instalação
 Certifique-se de ter instalado no seu computador as últimas versões do [NodeJS](https://nodejs.org/en/download/) e do [Python 3.X](https://www.python.org/downloads/)
+São utilizadas as dependências[PyPDF2](https://github.com/mstamy2/PyPDF2), [TestCafé](https://github.com/DevExpress/testcafe) e [Secretary](https://github.com/christopher-ramirez/secretary)
 Para instalar as dependências necessárias utilize os seguintes comandos:
 ```
 npm install -g testcafe@0.17.2
@@ -48,6 +49,7 @@ Os parâmetros necessários para essa rotina são:
     * Usuário
     * Senha
 * Pasta com a estrutura de pontos de controle OU Pasta com várias estruturas de pontos de controle
+**Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.py](generateMono/settings.py)**
 ```
 python generateMono.py localhost banco_pt_controle postgres postgres D:\2018-04-06
 ```

@@ -1,0 +1,18 @@
+{
+    // Aqui deverá ser identificado o caminho das imagens a serem utilizadas na geração da monografia
+
+    //A assinatura deverá ser um arquivo .jpg do responsável técnico do ponto
+    "signature": "C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg",
+
+    // As vistas aéreas a seguir podem ser geradas utilizando a ferramenta Atlas no QGIS
+
+    // O photoAerVIew é uma pasta na qual se encontram as vistas aéreas dos pontos. Escala sugerida : Entre 1:500 e 1:2000
+    "photoAerView": "C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg",
+
+    // O photoView1 é uma pasta na qual se encontram as vistas aéreas dos pontos. Escala sugerida : Entre 1:100000 e 1:250000
+    "photoView1": "C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg",
+    
+    // O photoAerVIew é uma pasta na qual se encontram as vistas aéreas dos pontos. Escala sugerida : Entre 1:1000000 e 1:2500000
+    // Neste caso a imagem de fundo poderá ser um vetor de feições de município/estado/país, para uma localização rápida em território nacional
+    "photoView2": "C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg"
+}

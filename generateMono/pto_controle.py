@@ -1,8 +1,7 @@
 # coding=utf-8
 
-import csv
-import os
 import re
+import json
 from datetime import datetime, date
 from pathlib import Path
 
@@ -13,11 +12,11 @@ from secretary import Renderer
 
 class GenerateMonograpy():
 
-    def __init__(self):
-        self.conn = psycopg2.connect("host='localhost' port='5432' dbname='pto_controle' user='postgres' password='postgres'")
-        self.path = Path('C:\\Users\\Eliton\\Desktop\\2018-05-01')
+    def __init__(self,path, host, port, db_name, user, password):
+        self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(host, port, db_name, user, password))
+        self.path = Path(path)
+        self.settings = json.load(open('./settings.json'))
         self.points = []
-        super().__init__()
     
     def fetchAll(self):
         with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
@@ -77,18 +76,19 @@ class GenerateMonograpy():
         print(pto)
 
         pto['dataMono'] = date.today()
+        # Necessário para diminuir o tamanho dos campo no modelo:
         pto['freq'] = pto['freq_processada']
-        # por algum bug na secretary durante a inserção das imagens é necessário duas imagens idênticas
-        pto['signature'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
-        pto['signature1'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
-        pto['signature2'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
-        pto['signature3'] = 'C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\hqdefault.jpg'
         pto['mc'] = pto['meridiano_central']
         pto['mascara'] = pto['mascara_elevacao']
         pto['taxa'] = pto['taxa_gravacao']
-        pto['sigmaXY'] = u'0,11'
-        pto['sigmaZ'] = u'0,18'
-        pto['isGrounded'] = 'teste'
+        pto['sigmaXY'] = pto['precisao_horizontal_esperada']
+        pto['sigmaZ'] = pto['precisao_vertical_Esperada']
+        # por algum bug na secretary durante a inserção das imagens é necessário duas imagens idênticas
+        pto['signature'] = self.settings['signature']
+        pto['signature1'] = self.settings['signature']
+        pto['signature2'] = self.settings['signature']
+        pto['signature3'] = self.settings['signature']
+        pto['isGrounded'] = 'teste' # Mudar no modelo
         pto['durRast'] = pto["fim_rastreio"] - pto["inicio_rastreio"]
         pto['inicio_rastreio'] = pto['inicio_rastreio'].strftime('%d/%m/%Y %H:%M:%S')
         pto['data_processamento'] = pto['data_processamento'].strftime('%d/%m/%Y')
@@ -100,19 +100,17 @@ class GenerateMonograpy():
         pto['photoPt3'] = photosPt[2]
         pto['photoPt4'] = photosPt[3]
 
-        # Need to generate aerial views
+        # Não esquecer que as visões aéreas tem que ser geradas!
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoAerView'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoView1'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoView2'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-
-        # print pto['nome']
+        pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}.jpg'.format(pto))][0]
+        pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}.jpg'.format(pto))][0]
+        pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}.jpg'.format(pto))][0]
 
         engine = Renderer()
 
         # Path do template
         result = engine.render(
-            template='C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\modelo2.odt', pto=pto)
+            template='../modelo.odt', pto=pto)
 
-        with open('C:\\Users\\Eliton\\Documents\\ferramentas_pto_controle_2\\generateMono\\results\\{}.odt'.format(pto['cod_ponto']), 'wb') as output:
+        with open(folder / '{}.odt'.format(pto['cod_ponto'], 'wb')) as output:
           output.write(result)
