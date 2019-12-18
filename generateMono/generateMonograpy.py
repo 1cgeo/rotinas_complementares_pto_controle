@@ -4,6 +4,7 @@ import re
 import json
 from datetime import datetime, date
 from pathlib import Path
+import sys
 
 import psycopg2
 import psycopg2.extras
@@ -15,7 +16,8 @@ class GenerateMonograpy():
     def __init__(self,path, host, port, db_name, user, password):
         self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(host, port, db_name, user, password))
         self.path = Path(path)
-        self.settings = json.load(open('./settings.json'))
+        with open('settings.json') as setting: 
+            self.settings = json.load(setting)
         self.points = []
     
     def fetchAll(self):
@@ -62,7 +64,7 @@ class GenerateMonograpy():
             '''.format(point))
             return cursor.fetchone()
 
-    def getDataFromStrucuture(self):
+    def getFoldersFromStrucuture(self):
         folders = [x for x in self.path.rglob('*') if x.is_dir() and x.name in self.points]
         for folder in folders:
             self.executeProcess(folders.pop())
@@ -82,13 +84,12 @@ class GenerateMonograpy():
         pto['mascara'] = pto['mascara_elevacao']
         pto['taxa'] = pto['taxa_gravacao']
         pto['sigmaXY'] = pto['precisao_horizontal_esperada']
-        pto['sigmaZ'] = pto['precisao_vertical_Esperada']
-        # por algum bug na secretary durante a inserção das imagens é necessário duas imagens idênticas
+        pto['sigmaZ'] = pto['precisao_vertical_esperada']
+        pto['m'] = 'Sim' if pto['materializado'] else 'Não'
+        # por algum bug no odt/secretary não dá pra replicar imagem (no caso a assinatura, que está no rodapé)
         pto['signature'] = self.settings['signature']
         pto['signature1'] = self.settings['signature']
         pto['signature2'] = self.settings['signature']
-        pto['signature3'] = self.settings['signature']
-        pto['isGrounded'] = 'teste' # Mudar no modelo
         pto['durRast'] = pto["fim_rastreio"] - pto["inicio_rastreio"]
         pto['inicio_rastreio'] = pto['inicio_rastreio'].strftime('%d/%m/%Y %H:%M:%S')
         pto['data_processamento'] = pto['data_processamento'].strftime('%d/%m/%Y')
@@ -102,9 +103,9 @@ class GenerateMonograpy():
 
         # Não esquecer que as visões aéreas tem que ser geradas!
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}.jpg'.format(pto))][0]
-        pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}.jpg'.format(pto))][0]
-        pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}.jpg'.format(pto))][0]
+        pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
+        pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
+        pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
 
         engine = Renderer()
 
@@ -112,5 +113,10 @@ class GenerateMonograpy():
         result = engine.render(
             template='../modelo.odt', pto=pto)
 
-        with open(folder / '{}.odt'.format(pto['cod_ponto'], 'wb')) as output:
-          output.write(result)
+        with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
+            output.write(result)
+
+if __name__ == "__main__":
+    generate = GenerateMonograpy(*sys.argv[1:])
+    generate.getListOfPoints()
+    generate.getFoldersFromStrucuture()
