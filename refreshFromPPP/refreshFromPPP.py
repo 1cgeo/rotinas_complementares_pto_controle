@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 from datetime import datetime, date
 from pathlib import Path
 
@@ -8,9 +9,9 @@ import PyPDF2
 
 class RefreshFromPPP():
 
-    def __init__(self, folder):
-        self.folder = Path(folder)
-        self.conn = psycopg2.connect("host='localhost' port='5432' dbname='pto_controle' user='postgres' password='postgres'")
+    def __init__(self, path, host, port, db_name, user, password):
+        self.folder = Path(path)
+        self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(host, port, db_name, user, password))
 
     def readPPP(self):
         # Possibility : update the timestamp of measure's beginning from PPP and orbita(has domain)
@@ -54,3 +55,8 @@ class RefreshFromPPP():
         lon_deg, lon_min, lon_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lon)[0]
         new_lon = float(lon_deg) + float(lon_min)/60 + float(lon_seg.replace(',', '.'))/3600
         return new_lat, new_lon
+
+
+if __name__ == "__main__":
+    test = RefreshFromPPP*sys.argv[1:])
+    test.readPPP()

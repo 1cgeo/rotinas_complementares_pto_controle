@@ -31,25 +31,32 @@ Esta rotina atualiza o banco de dados com os dados do PPP.
 Os parâmetros necessários para essa rotina são:
 * Parâmetros de conexão do banco:
     * Host
+    * Porta
     * Nome do Banco
     * Usuário
     * Senha
 * Pasta com a estrutura de pontos de controle
 ```
-python refreshFromPPP.py localhost banco_pt_controle postgres postgres D:\2018-04-06
+python refreshFromPPP.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
 
 ### 8- Gerar Monografia
 Esta rotina gera monografias baseadas no [Modelo](modelo.odt) em formato ODT.
 Para utilizar esta rotina é necessário que o LibreOffice esteja instalado no computador.
 Os parâmetros necessários para essa rotina são:
+* Pasta com a estrutura de pontos de controle OU Pasta com várias estruturas de pontos de controle
 * Parâmetros de conexão do banco:
     * Host
+    * Porta
     * Nome do Banco
     * Usuário
     * Senha
-* Pasta com a estrutura de pontos de controle OU Pasta com várias estruturas de pontos de controle
-**Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.py](generateMono/settings.py)**
+**Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json)**
+No arquivo [settings.json](generateMono/settings.json) serão definidos:
+* signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
+* photoAerView: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:500 e 1:2000
+* photoView1: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:100000 e 1:250000
+* photoView2: Caminho da pasta contendo imagens para localização rápida do ponto em território nacional. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:1000000 e 1:2000000
 ```
-python generateMono.py localhost banco_pt_controle postgres postgres D:\2018-04-06
+python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
