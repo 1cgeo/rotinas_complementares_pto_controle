@@ -23,7 +23,7 @@ class RefreshFromPPP():
                 page = read_pdf.getPage(0)
                 page_content = page.extractText()
                 page_pdf = page_content.replace('\n', '')
-                point['altitude_geometrica'], point['norte'], point['este'] = re.findall(
+                point['altitude_geometrica'], point['norte'], point['leste'] = re.findall(
                     r'([0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
                 point['altitude_geometrica'] = point['altitude_geometrica'].replace(',', '.')
                 point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(.{1,7})Precis', page_pdf)[0].replace(',', '.')
@@ -41,7 +41,7 @@ class RefreshFromPPP():
         with self.conn.cursor() as cursor:
             cursor.execute(u'''
             UPDATE bpc.ponto_controle_p
-            SET norte='{norte}', este='{este}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
+            SET norte='{norte}', leste='{este}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
             freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({latitude} {longitude})', 4674),
             data_processamento='{data_processamento}'
             WHERE cod_ponto='{cod_ponto}'

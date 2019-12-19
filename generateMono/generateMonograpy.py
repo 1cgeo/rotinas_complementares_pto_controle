@@ -27,6 +27,15 @@ class GenerateMonograpy():
             ''')
             return cursor.fetchall()
 
+    def updateDB(self, point):
+        with self.conn.cursor() as cursor:
+            cursor.execute(u'''
+            UPDATE bpc.ponto_controle_p
+            SET possui_monografia = True
+            WHERE cod_ponto = '{}'
+            '''.format(point))
+        self.conn.commit()
+
     def fetchOne(self, point):
         with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(u'''
@@ -115,6 +124,8 @@ class GenerateMonograpy():
 
         with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
             output.write(result)
+
+        self.updateDB(pto['cod_ponto'])
 
 if __name__ == "__main__":
     generate = GenerateMonograpy(*sys.argv[1:])
