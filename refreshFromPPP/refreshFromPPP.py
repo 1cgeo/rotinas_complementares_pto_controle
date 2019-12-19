@@ -23,7 +23,7 @@ class RefreshFromPPP():
                 page = read_pdf.getPage(0)
                 page_content = page.extractText()
                 page_pdf = page_content.replace('\n', '')
-                point['altitude_geometrica'], point['norte'], point['leste'] = re.findall(
+                point['altitude_geometrica'], point['norte'], point['este'] = re.findall(
                     r'([0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
                 point['altitude_geometrica'] = point['altitude_geometrica'].replace(',', '.')
                 point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(.{1,7})Precis', page_pdf)[0].replace(',', '.')

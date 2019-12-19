@@ -8,7 +8,7 @@ Rotinas disponíveis neste repositório:
 
 ## Instalação
 Certifique-se de ter instalado no seu computador as últimas versões do [NodeJS](https://nodejs.org/en/download/) e do [Python 3.X](https://www.python.org/downloads/)
-São utilizadas as dependências[PyPDF2](https://github.com/mstamy2/PyPDF2), [TestCafé](https://github.com/DevExpress/testcafe) e [Secretary](https://github.com/christopher-ramirez/secretary)
+São utilizadas as dependências [PyPDF2](https://github.com/mstamy2/PyPDF2), [TestCafé](https://github.com/DevExpress/testcafe) e [Secretary](https://github.com/christopher-ramirez/secretary)
 Para instalar as dependências necessárias utilize os seguintes comandos:
 ```
 npm install -g testcafe@0.17.2
@@ -51,6 +51,7 @@ Os parâmetros necessários para essa rotina são:
     * Nome do Banco
     * Usuário
     * Senha
+
 **Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json)**
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
