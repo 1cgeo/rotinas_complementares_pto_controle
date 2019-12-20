@@ -5,7 +5,7 @@ import json
 from datetime import datetime, date
 from pathlib import Path
 import sys
-
+import subprocess
 import psycopg2
 import psycopg2.extras
 import PyPDF2
@@ -108,9 +108,9 @@ class GenerateMonograpy():
 
         # Não esquecer que as visões aéreas tem que ser geradas!
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
-        pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
-        pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}.jpg'.format(pto['cod_ponto']))][0]
+        pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}*.png'.format(pto['cod_ponto']))][0]
+        pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}*.png'.format(pto['cod_ponto']))][0]
+        pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}*.png'.format(pto['cod_ponto']))][0]
 
         engine = Renderer()
 
@@ -120,6 +120,10 @@ class GenerateMonograpy():
 
         with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
             output.write(result)
+
+        process = '"{}" --headless --convert-to pdf "{}/{}.pdf"'.format(self.settings['pathLibreOffice'], folder, pto['cod_ponto'])
+        print(process)
+        subprocess.run(process)
 
 if __name__ == "__main__":
     generate = GenerateMonograpy(*sys.argv[1:])
