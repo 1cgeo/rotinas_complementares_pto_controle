@@ -61,3 +61,11 @@ No arquivo [settings.json](generateMono/settings.json) serão definidos:
 ```
 python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
+
+#### Como gerar as vistas aéreas em lote
+1- Definir estilos e imagens
+2- Gerar o compositor, definir a escala (na aba layout) e habilitar o atlas
+[Imagem1](readme/Img1.png)
+3- Configurar o atlas como mostra a imagem abaixo. Não esquecer de habilitar a opção 'Controlado pelo Atlas' na aba Propriedades do item
+[Imagem2](readme/Img2.png)
+4- Exportar as imagens na opção 'Exportar Atlas como imagem' 
