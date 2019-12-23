@@ -23,7 +23,7 @@ class RefreshFromPPP():
                 page = read_pdf.getPage(0)
                 page_content = page.extractText()
                 page_pdf = page_content.replace('\n', '')
-                point['altitude_geometrica'], point['norte'], point['este'] = re.findall(
+                point['altitude_geometrica'], point['norte'], point['leste'] = re.findall(
                     r'([0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
                 point['altitude_geometrica'] = point['altitude_geometrica'].replace(',', '.')
                 point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(.{1,7})Precis', page_pdf)[0].replace(',', '.')
@@ -34,7 +34,6 @@ class RefreshFromPPP():
                 point['data_processamento'] = datetime.strptime(data, '%d/%m/%Y')
                 lat, lon = re.findall(r'levantamento5(.{2,3}°.{2}´.{7}).(.{2,3}°.{2}´.{7})', page_pdf)[0]
                 point['latitude'], point['longitude'] = self.evaluateCoords(lat, lon)
-                print(point)
                 self.updateDB(point)
 
     def updateDB(self, point):
@@ -58,5 +57,5 @@ class RefreshFromPPP():
 
 
 if __name__ == "__main__":
-    test = RefreshFromPPP*sys.argv[1:])
+    test = RefreshFromPPP(*sys.argv[1:])
     test.readPPP()

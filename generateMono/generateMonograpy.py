@@ -75,7 +75,7 @@ class GenerateMonograpy():
 
     def executeProcess(self, folder):
         pto = self.fetchOne(folder.name)
-        print(pto)
+        # print(pto)
 
         pto['dataMono'] = date.today()
         # Necessário para diminuir o tamanho dos campo no modelo:
@@ -121,9 +121,14 @@ class GenerateMonograpy():
         with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
             output.write(result)
 
-        process = '"{}" --headless --convert-to pdf "{}/{}.pdf"'.format(self.settings['pathLibreOffice'], folder, pto['cod_ponto'])
-        print(process)
+        process = '"{}" --headless --convert-to pdf "{}\{}.odt"'.format(self.settings['pathLibreOffice'], folder, pto['cod_ponto'])
         subprocess.run(process)
+
+        # Transfere o pdf para a estrutura de pastas e deleta o odt
+        Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '{}.pdf'.format(pto['cod_ponto'])))
+        Path.unlink(Path(folder / '{}.odt'.format(pto['cod_ponto'])))
+
+
 
 if __name__ == "__main__":
     generate = GenerateMonograpy(*sys.argv[1:])

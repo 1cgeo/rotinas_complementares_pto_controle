@@ -41,7 +41,7 @@ const findPPP = dir => {
 const removeDownloaded = dir => {
   let zips = [];
   readdirSync(dir).forEach(file => {
-    const pto_regex = /^(RS|PR|SC|SP)-(HV|Base)-[1-9]+[0-9]*$/;
+    const pto_regex = /^([A-z]{2})-(HV|Base)-[1-9]+[0-9]*$/;
     if (
       lstatSync(join(dir, file)).isFile() &&
       file.split(".")[file.split(".").length - 1] == "zip" &&
@@ -75,9 +75,10 @@ fixture `Test`
 zips.forEach(zip => {
   let name =
   "Download: " + zip.split("\\")[zip.split("\\").length - 1].slice(0, -4);
-
+  
   test(name, async t => {
       await t
+        // .click(Selector("a").withText("Processar os dados"))
         .typeText(
           Selector("input").withAttribute("name", "email"),
           process.argv[8]
