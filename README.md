@@ -18,13 +18,14 @@ pip install -r requirements.txt
 ### 5- Gerar PPP
 Esta rotina acessa o portal do IBGE e realiza o download do processamento realizado pela plataforma de PPP do IBGE.
 Os parâmetros necessários para essa rotina são:
-* Navegador a ser utilizado (chrome ou firefox)
+* Navegador a ser utilizado (de preferência chrome ou firefox)
 * Pasta com a estrutura de pontos de controle
-* Pasta na qual será realizada o download do PPP
+* Pasta onde são armazenados os PPP baixados
 * Email
 ```
 testcafe -c 3 chrome upload_ppp.js D:\2018-04-06 D:\downloads\ppp test@email.com.br
 ```
+É necessário que o navegador esteja configurado a realizar o download automático e a pasta de download padrão deverá ser a pasta do PPP (no exemplo, D:\downloads\ppp).
 
 ### 7- Atualizar banco com dados do PPP
 Esta rotina atualiza o banco de dados com os dados do PPP.
@@ -53,13 +54,11 @@ Os parâmetros necessários para essa rotina são:
     * Senha
 
 **Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json)**
-
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
 * photoAerView: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:500 e 1:2000
 * photoView1: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:100000 e 1:250000
 * photoView2: Caminho da pasta contendo imagens para localização rápida do ponto em território nacional. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:1000000 e 1:2000000
-* pathLibreOffice: Caminho da do arquivo soffice.exe na pasta de instalação do LibreOffice, geralmente em _C:\Program Files\LibreOffice\program\soffice.exe_
 ```
 python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
