@@ -74,9 +74,10 @@ Todas as imagens deverão estar em formato *jpg*!
 ![Imagem2](readme/Img2.png)
 4- Exportar as imagens na opção 'Exportar Atlas como imagem' 
 Exemplos de vistas aéreas:
+
 |Imagem|Exemplo|
 |-----|-----|
-|photoCGEO|![Imagem3](readme/brasao.jpg)|
+|photoCGEO|![Imagem3](readme/brasao.png)|
 |photoAerView|![Imagem4](readme/aer_view.png)|
 |photoView1|![Imagem5](readme/view1.png)|
 |photoView2|![Imagem6](readme/view2.png)|
