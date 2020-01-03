@@ -52,10 +52,11 @@ Os parâmetros necessários para essa rotina são:
     * Usuário
     * Senha
 
-**Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json)**
+**Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json).**
 
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
+* photoCGEO: Caminho da imagem do brasão do CGEO
 * photoAerView: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:500 e 1:2000
 * photoView1: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:100000 e 1:250000
 * photoView2: Caminho da pasta contendo imagens para localização rápida do ponto em território nacional. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:1000000 e 1:2000000
@@ -63,11 +64,20 @@ No arquivo [settings.json](generateMono/settings.json) serão definidos:
 ```
 python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
+Todas as imagens deverão estar em formato *jpg*!
 
 #### Como gerar as vistas aéreas em lote
 1- Definir estilos e imagens
+
 2- Gerar o compositor, definir a escala (na aba layout) e habilitar o atlas
 ![Imagem1](readme/Img1.png)
 3- Configurar o atlas como mostra a imagem abaixo. Não esquecer de habilitar a opção 'Controlado pelo Atlas' na aba Propriedades do item
 ![Imagem2](readme/Img2.png)
 4- Exportar as imagens na opção 'Exportar Atlas como imagem' 
+Exemplos de vistas aéreas:
+|Imagem|Exemplo|
+|-----|-----|
+|photoCGEO|![Imagem3](readme/brasao.jpg)|
+|photoAerView|![Imagem4](readme/aer_view.png)|
+|photoView1|![Imagem5](readme/view1.png)|
+|photoView2|![Imagem6](readme/view2.png)|
