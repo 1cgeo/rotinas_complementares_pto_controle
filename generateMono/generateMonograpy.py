@@ -128,8 +128,6 @@ class GenerateMonograpy():
         Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '{}.pdf'.format(pto['cod_ponto'])))
         Path.unlink(Path(folder / '{}.odt'.format(pto['cod_ponto'])))
 
-
-
 if __name__ == "__main__":
     generate = GenerateMonograpy(*sys.argv[1:])
     generate.getListOfPoints()
