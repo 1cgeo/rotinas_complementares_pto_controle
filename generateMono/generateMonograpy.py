@@ -126,7 +126,8 @@ class GenerateMonograpy():
         subprocess.run(process)
 
         # Transfere o pdf para a estrutura de pastas e deleta o odt
-        Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '{}.pdf'.format(pto['cod_ponto'])))
+        Path.mkdir(folder / '8_Monografia', exist_ok=True)
+        Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '8_Monografia' / '{}.pdf'.format(pto['cod_ponto'])))
         Path.unlink(Path(folder / '{}.odt'.format(pto['cod_ponto'])))
 
 if __name__ == "__main__":

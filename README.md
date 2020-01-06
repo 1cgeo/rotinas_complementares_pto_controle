@@ -1,5 +1,5 @@
-# Conjunto de ferramentas para medição 2
-Conjunto de ferramentas automatizam o processo de processamento e controle de qualidade da medição de pontos de controle.
+# Conjunto de rotinas complementares ao Plugin de Pontos de Controle
+Conjunto de ferramentas que automatizam o processamento e controle de qualidade da medição de pontos de controle.
 Essas ferramentas complementam as rotinas disponíveis em https://github.com/1cgeo/ferramentas_pto_controle, que devem ser utilizadas em conjunto!
 Rotinas disponíveis neste repositório:
 * 5- Gerar PPP
