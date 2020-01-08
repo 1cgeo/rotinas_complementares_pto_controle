@@ -57,13 +57,14 @@ Os parâmetros necessários para essa rotina são:
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
 * photoCGEO: Caminho da imagem do brasão do CGEO
+* pathLibreOffice: Caminho do arquivo soffice.exe na pasta de instalação do LibreOffice
 * photoAerView: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:500 e 1:2000
 * photoView1: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:100000 e 1:250000
 * photoView2: Caminho da pasta contendo imagens para localização rápida do ponto em território nacional. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:1000000 e 1:2000000
 ```
 python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
-Todas as imagens deverão estar em formato *jpg*!
+Tenha certeza que as imagens aéreas (nível ponto, nível município e nível estado) foram geradas e foram corretamente distribuídas na estrutura de pastas pela rotina 8- Distribuir vistas aéreas na estrutura de pasta. Todas as imagens deverão estar em formato *jpg*!
 
 #### Como gerar as vistas aéreas em lote
 1- Definir estilos e imagens
