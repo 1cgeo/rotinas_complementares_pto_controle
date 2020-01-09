@@ -77,7 +77,7 @@ class GenerateMonograpy():
         pto = self.fetchOne(folder.name)
         # print(pto)
 
-        pto['dataMono'] = date.today()
+        pto['dataMono'] = date.today().strftime('%d/%m/%Y')
         # Necessário para diminuir o tamanho dos campo no modelo:
         pto['freq'] = pto['freq_processada']
         pto['mc'] = pto['meridiano_central']
@@ -109,9 +109,9 @@ class GenerateMonograpy():
 
         # Não esquecer que as visões aéreas tem que ser geradas!
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
-        pto['photoAerView'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto['cod_ponto']}_AEREA.jpg'))
-        pto['photoView1'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto['cod_ponto']}_MUNICIPIO.jpg'))
-        pto['photoView2'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto['cod_ponto']}_ESTADO.jpg'))
+        pto['photoAerView'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto["cod_ponto"]}_AEREA.png'))
+        pto['photoView1'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto["cod_ponto"]}_MUNICIPIO.png'))
+        pto['photoView2'] = str(Path(folder / '7_Imagens_Monografia' / f'{pto["cod_ponto"]}_ESTADO.png'))
         # pto['photoAerView'] = [str(f) for f in Path(self.settings['photoAerView']).iterdir() if f.match('{}*.jpg'.format(pto['cod_ponto']))][0]
         # pto['photoView1'] = [str(f) for f in Path(self.settings['photoView1']).iterdir() if f.match('{}*.jpg'.format(pto['cod_ponto']))][0]
         # pto['photoView2'] = [str(f) for f in Path(self.settings['photoView2']).iterdir() if f.match('{}*.jpg'.format(pto['cod_ponto']))][0]
@@ -132,6 +132,8 @@ class GenerateMonograpy():
         Path.mkdir(folder / '8_Monografia', exist_ok=True)
         Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '8_Monografia' / '{}.pdf'.format(pto['cod_ponto'])))
         Path.unlink(Path(folder / '{}.odt'.format(pto['cod_ponto'])))
+
+        print(f'Monografia do ponto {pto["cod_ponto"]} concluída.')
 
 if __name__ == "__main__":
     generate = GenerateMonograpy(*sys.argv[1:])
