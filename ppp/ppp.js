@@ -19,18 +19,18 @@
 import { Selector } from "testcafe";
 
 import { lstatSync, readdirSync } from "fs";
-import { join } from "path";
+const path = require('path')
 
 const findPPP = dir => {
   let zips = [];
   readdirSync(dir).forEach(file => {
-    const filepath = join(dir, file);
+    const filepath = path.join(dir, file);
     if (lstatSync(filepath).isDirectory()) {
       zips = [...zips, ...findPPP(filepath)];
     } else if (
       lstatSync(filepath).isFile() &&
       filepath.split(".")[filepath.split(".").length - 1] == "zip" &&
-      filepath.split("\\")[filepath.split("\\").length - 2] == "2_RINEX"
+      filepath.split(path.sep)[filepath.split(path.sep).length - 2] == "2_RINEX"
     ) {
       zips.push(filepath);
     }
@@ -41,9 +41,9 @@ const findPPP = dir => {
 const removeDownloaded = dir => {
   let zips = [];
   readdirSync(dir).forEach(file => {
-    const pto_regex = /^([A-z]{2})-(HV|Base)-[1-9]+[0-9]*$/;
+    const pto_regex = /^([A-Z]{2})-(HV|Base)-[1-9]+[0-9]*$/;
     if (
-      lstatSync(join(dir, file)).isFile() &&
+      lstatSync(path.join(dir, file)).isFile() &&
       file.split(".")[file.split(".").length - 1] == "zip" &&
       file.split("_").length == 4 &&
       pto_regex.test(file.split("_")[1].slice(0, -4))
@@ -53,8 +53,8 @@ const removeDownloaded = dir => {
   });
   return pto_path => {
     let pto = pto_path
-      .split("\\")
-      [pto_path.split("\\").length - 1].slice(0, -4);
+      .split(path.sep)
+      [pto_path.split(path.sep).length - 1].slice(0, -4);
     if (zips.indexOf(pto) > -1) {
       return false;
     } else {
@@ -67,7 +67,6 @@ const removeDownloaded = dir => {
 let zips = findPPP(process.argv[6]);
 
 zips = zips.filter(removeDownloaded(process.argv[7]));
-console.log(zips)
 
 fixture `Test`
     .page `https://www.ibge.gov.br/geociencias-novoportal/informacoes-sobre-posicionamento-geodesico/servicos-para-posicionamento-geodesico/16334-servico-online-para-pos-processamento-de-dados-gnss-ibge-ppp.html?=&t=processar-os-dados`
