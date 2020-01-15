@@ -83,7 +83,7 @@ Exemplos de vistas aéreas:
 
 |Imagem|Exemplo|
 |-----|-----|
-|photoCGEO|<img src="readme/brasao.png" align="center" width="200">
+|photoCGEO|<p align="center"><img src="readme/brasao.png" width="200"></p>|
 |photoAerView|![Imagem4](readme/aer_view.png)|
 |photoView1|![Imagem5](readme/view1.png)|
 |photoView2|![Imagem6](readme/view2.png)|
