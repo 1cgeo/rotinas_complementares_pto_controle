@@ -5,7 +5,7 @@ Lembrar de utilizar o comando dentro da pasta da ferramenta (utilizar o comando 
 Rotinas disponíveis neste repositório:
 * 5- Gerar PPP
 * 7- Atualizar banco com dados do PPP
-* 8- Gerar Monografia
+* 9- Gerar Monografia
 
 ## Instalação
 Certifique-se de ter instalado no seu computador as últimas versões do [NodeJS](https://nodejs.org/en/download/) e do [Python 3.X](https://www.python.org/downloads/)
@@ -62,14 +62,11 @@ Os parâmetros necessários para essa rotina são:
 **Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json).**
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
-* photoCGEO: Caminho da imagem do brasão do CGEO
-* photoAerView: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:500 e 1:2000
-* photoView1: Caminho da pasta contendo imagens aéreas dos pontos. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:100000 e 1:250000
-* photoView2: Caminho da pasta contendo imagens para localização rápida do ponto em território nacional. O nome da imagem deverá ser o nome do ponto (Ex: RS-HV-01.jpg). Escala recomendada: entre 1:1000000 e 1:2000000
+* pathImageCGEO: Caminho da imagem do brasão do CGEO
+* pathLibreOffice: Caminho do arquivo soffice.exe no Windows (Localizado na pasta de instalação do LibreOffice) ou libreoffice no Linux (geralmente em /usr/bin/libreoffice)
 ```
-python generateMono.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
+python generateMonograpy.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```
-Todas as imagens deverão estar em formato *jpg*!
 
 #### Como gerar as vistas aéreas em lote
 1- Definir estilos e imagens
@@ -78,7 +75,7 @@ Todas as imagens deverão estar em formato *jpg*!
 ![Imagem1](readme/Img1.png)
 3- Configurar o atlas como mostra a imagem abaixo. Não esquecer de habilitar a opção 'Controlado pelo Atlas' na aba Propriedades do item
 ![Imagem2](readme/Img2.png)
-4- Exportar as imagens na opção 'Exportar Atlas como imagem' 
+4- Exportar as imagens na opção 'Exportar Atlas como imagem'. As imagens geradas deverão estar no formato .jpg!
 Exemplos de vistas aéreas:
 
 |Imagem|Exemplo|

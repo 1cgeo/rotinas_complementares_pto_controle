@@ -16,6 +16,7 @@ class GenerateMonograpy():
     def __init__(self,path, host, port, db_name, user, password):
         self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(host, port, db_name, user, password))
         self.path = Path(path)
+        self.img_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.JPEG']
         with open('settings.json') as setting: 
             self.settings = json.load(setting)
         self.points = []
@@ -101,11 +102,9 @@ class GenerateMonograpy():
             pass
 
         # Fotos do ponto
-        photosPt = [str(f) for f in Path(folder / '3_Foto_Rastreio').iterdir() if f.match('*.jpg')]
-        pto['photoPt1'] = photosPt[0]
-        pto['photoPt2'] = photosPt[1]
-        pto['photoPt3'] = photosPt[2]
-        pto['photoPt4'] = photosPt[3]
+        photosPt = [str(f) for f in Path(folder / '3_Foto_Rastreio').iterdir() if f.suffix in self.img_extensions]
+        for _idx in range(len(photosPt)):
+            pto[f'photoPt{_idx + 1}'] = photosPt[_idx]
 
         # Não esquecer que as visões aéreas tem que ser geradas!
         pto['photoCroqui'] = [str(f) for f in Path(folder / '4_Croqui').iterdir() if f.match('*.jpg')][0]
@@ -126,7 +125,8 @@ class GenerateMonograpy():
             output.write(result)
 
         process = '"{}" --headless --convert-to pdf "{}\{}.odt"'.format(self.settings['pathLibreOffice'], folder, pto['cod_ponto'])
-        subprocess.run(process)
+        _path_odt = Path(folder / pto['cod_ponto'])
+        subprocess.run([self.settings['pathLibreOffice'], '--headless', '--convert-to', 'pdf', _path_odt])
 
         # Transfere o pdf para a estrutura de pastas e deleta o odt
         Path.mkdir(folder / '8_Monografia', exist_ok=True)

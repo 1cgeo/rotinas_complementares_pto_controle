@@ -1,3 +1,4 @@
+# coding=utf8
 import os
 import re
 import sys
@@ -41,7 +42,7 @@ class RefreshFromPPP():
             cursor.execute(u'''
             UPDATE bpc.ponto_controle_p
             SET norte='{norte}', leste='{leste}', altitude_geometrica='{altitude_geometrica}', altitude_ortometrica='{altitude_ortometrica}',
-            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({latitude} {longitude})', 4674),
+            freq_processada='{freq_processada}', latitude='{latitude}', longitude='{longitude}', geom=ST_GeomFromText('POINT({longitude} {latitude})', 4674),
             data_processamento='{data_processamento}'
             WHERE cod_ponto='{cod_ponto}'
             '''.format(**point))
