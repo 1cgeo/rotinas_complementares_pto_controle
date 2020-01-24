@@ -124,9 +124,9 @@ class GenerateMonograpy():
         with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
             output.write(result)
 
-        process = '"{}" --headless --convert-to pdf "{}\{}.odt"'.format(self.settings['pathLibreOffice'], folder, pto['cod_ponto'])
-        _path_odt = Path(folder / pto['cod_ponto'])
-        subprocess.run([self.settings['pathLibreOffice'], '--headless', '--convert-to', 'pdf', _path_odt])
+        # Gera o pdf
+        _path_odt = str(Path(folder / pto['cod_ponto']))
+        subprocess.run([f"{self.settings['pathLibreOffice']}", "--headless", "--convert-to", "pdf", f"{_path_odt}.odt"])
 
         # Transfere o pdf para a estrutura de pastas e deleta o odt
         Path.mkdir(folder / '8_Monografia', exist_ok=True)
