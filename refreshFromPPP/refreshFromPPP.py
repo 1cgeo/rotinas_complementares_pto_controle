@@ -51,9 +51,17 @@ class RefreshFromPPP():
     @staticmethod
     def evaluateCoords(lat, lon):
         lat_deg, lat_min, lat_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lat)[0]
-        new_lat = float(lat_deg) + float(lat_min)/60 + float(lat_seg.replace(',', '.'))/3600
         lon_deg, lon_min, lon_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lon)[0]
-        new_lon = float(lon_deg) + float(lon_min)/60 + float(lon_seg.replace(',', '.'))/3600
+
+        if float(lat_deg) > 0:
+            new_lat = float(lat_deg) + float(lat_min)/60 + float(lat_seg.replace(',', '.'))/3600
+        else:
+            new_lat = float(lat_deg) - float(lat_min)/60 - float(lat_seg.replace(',', '.'))/3600
+        
+        if float(lon_deg) > 0:
+            new_lon = float(lon_deg) + float(lon_min)/60 + float(lon_seg.replace(',', '.'))/3600
+        else:
+            new_lon = float(lon_deg) - float(lon_min)/60 - float(lon_seg.replace(',', '.'))/3600
         return new_lat, new_lon
 
 
