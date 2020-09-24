@@ -25,9 +25,9 @@ class RefreshFromPPP():
                 page_content = page.extractText()
                 page_pdf = page_content.replace('\n', '')
                 point['altitude_geometrica'], point['norte'], point['leste'] = re.findall(
-                    r'([0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
+                    r'(\-?[0-9]{1,},[0-9]{1,2})([0-9]{7}[.][0-9]{3})([0-9]{6}[.][0-9]{3})', page_pdf)[1]
                 point['altitude_geometrica'] = point['altitude_geometrica'].replace(',', '.')
-                point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(.{1,7})Precis', page_pdf)[0].replace(',', '.')
+                point['altitude_ortometrica'] = re.findall(r'Ortométrica\(m\)(\-?.{1,7})Precis', page_pdf)[0].replace(',', '.')
                 point['cod_ponto'] = re.findall(r'domarco:(.+)Início', page_pdf)[0]
                 point['orbita'] = re.findall(r'dossatélites:\d(\w+)Frequ', page_pdf)[0].capitalize()
                 point['freq_processada'] = re.findall(r'Frequênciaprocessada:(\w+)Interva', page_pdf)[0]
@@ -35,6 +35,7 @@ class RefreshFromPPP():
                 point['data_processamento'] = datetime.strptime(data, '%d/%m/%Y')
                 lat, lon = re.findall(r'levantamento5(.{2,3}°.{2}´.{7}).(.{2,3}°.{2}´.{7})', page_pdf)[0]
                 point['latitude'], point['longitude'] = self.evaluateCoords(lat, lon)
+                # print(point)
                 self.updateDB(point)
 
     def updateDB(self, point):
