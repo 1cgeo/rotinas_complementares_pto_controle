@@ -59,11 +59,14 @@ Os parâmetros necessários para essa rotina são:
     * Usuário
     * Senha
 
+**Importante**: A rotina espera que as imagens aéreas, as imagens do ponto e a assinatura estejam no formato horizontal(paisagem), e que a imagem do croqui e o brasão do CGEO estejam no formato vertical(retrato). Para as fotos do ponto (4 imagens da vista local do ponto), um pré-processamento dessas imagens adiciona uma borda branca caso a imagem esteja no formato vertical. Outras imagens não possuem pré-processamento, e serão deformadas se não estiverem na orientação correta.
+
 **Antes de executar esta rotina, verificar parâmetros adicionais no arquivo [settings.json](generateMono/settings.json).**
 No arquivo [settings.json](generateMono/settings.json) serão definidos:
 * signature: Caminho da imagem jpeg da assinatura do responsável técnico dos pontos de controle
 * pathImageCGEO: Caminho da imagem do brasão do CGEO
 * pathLibreOffice: Caminho do arquivo soffice.exe no Windows (Localizado na pasta de instalação do LibreOffice) ou libreoffice no Linux (geralmente em /usr/bin/libreoffice)
+
 ```
 python generateMonograpy.py D:\2018-04-06 localhost 5432 banco_pt_controle usuario senha
 ```

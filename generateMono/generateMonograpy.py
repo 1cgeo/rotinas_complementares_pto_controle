@@ -10,6 +10,7 @@ import psycopg2
 import psycopg2.extras
 import PyPDF2
 from secretary import Renderer
+from processImages import processImages
 
 class GenerateMonograpy():
 
@@ -20,6 +21,7 @@ class GenerateMonograpy():
         with open('settings.json') as setting: 
             self.settings = json.load(setting)
         self.points = []
+        processImages(self.path)
     
     def fetchAll(self):
         with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
