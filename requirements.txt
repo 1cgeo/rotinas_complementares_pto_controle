@@ -1,3 +1,4 @@
 pypdf2
 secretary
 psycopg2
+opencv-python
