@@ -69,6 +69,8 @@ class GenerateMonograpy():
 
     def getFoldersFromStrucuture(self):
         folders = [x for x in self.path.rglob('*') if x.is_dir() and x.name in self.points]
+        if not folders:
+            raise Exception('Os pontos da pasta não foram localizados no banco de pontos.')
         for folder in folders:
             self.executeProcess(folders.pop())
         
@@ -105,7 +107,7 @@ class GenerateMonograpy():
 
         # Fotos do ponto
         photosPt = [str(f) for f in Path(folder / '3_Foto_Rastreio').iterdir() if f.suffix in self.img_extensions]
-        for _idx in range(len(photosPt)):
+        for _idx, _ in enumerate(photosPt):
             pto[f'photoPt{_idx + 1}'] = photosPt[_idx]
 
         # Não esquecer que as visões aéreas tem que ser geradas!
@@ -123,17 +125,20 @@ class GenerateMonograpy():
         result = engine.render(
             template='../modelo.odt', pto=pto)
 
-        with open(folder / '{}.odt'.format(pto['cod_ponto']), 'wb') as output:
+        # Cria a pasta 8_Monografia
+        Path.mkdir(folder / '8_Monografia', exist_ok=True)
+
+        # Gera o arquivo odt temporário
+        path_odt = Path(folder / '8_Monografia' / f"{pto['cod_ponto']}.odt")
+        with open(path_odt, 'wb') as output:
             output.write(result)
 
         # Gera o pdf
-        _path_odt = str(Path(folder / pto['cod_ponto']))
-        subprocess.run([f"{self.settings['pathLibreOffice']}", "--headless", "--convert-to", "pdf", f"{_path_odt}.odt"])
+        subprocess.run([f"{self.settings['pathLibreOffice']}", "--headless", "--convert-to", "pdf", f"{path_odt}"])
 
         # Transfere o pdf para a estrutura de pastas e deleta o odt
-        Path.mkdir(folder / '8_Monografia', exist_ok=True)
         Path.replace(Path.cwd() / '{}.pdf'.format(pto['cod_ponto']), Path(folder / '8_Monografia' / '{}.pdf'.format(pto['cod_ponto'])))
-        Path.unlink(Path(folder / '{}.odt'.format(pto['cod_ponto'])))
+        Path.unlink(path_odt)
 
         print(f'Monografia do ponto {pto["cod_ponto"]} concluída.')
 

@@ -12,7 +12,8 @@ class RefreshFromPPP():
 
     def __init__(self, path, host, port, db_name, user, password):
         self.folder = Path(path)
-        self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(host, port, db_name, user, password))
+        self.conn = psycopg2.connect("host='{0}' port='{1}' dbname='{2}' user='{3}' password='{4}'".format(
+            host, port, db_name, user, password))
         self.map_orbit = {
             'Ultra-rápida': 2,
             'Rápida': 3,
@@ -23,7 +24,7 @@ class RefreshFromPPP():
         # Possibility : update the timestamp of measure's beginning from PPP and orbita(has domain)
         files = [x for x in self.folder.rglob('*.pdf') if '6_Processamento_PPP' in x.parts]
         for item in files:
-             with item.open(mode='rb') as pdffile:
+            with item.open(mode='rb') as pdffile:
                 point = {}
                 read_pdf = PyPDF2.PdfFileReader(pdffile)
                 page = read_pdf.getPage(0)
@@ -43,7 +44,6 @@ class RefreshFromPPP():
                 point['meridiano_central'] = re.findall(r'(-?\d\d)Nadatadolevantamento', page_pdf)[0]
                 lat, lon = re.findall(r'levantamento5(.{2,3}°.{2}´.{7}).(.{2,3}°.{2}´.{7})', page_pdf)[0]
                 point['latitude'], point['longitude'] = self.evaluateCoords(lat, lon)
-                # print(point)
                 self.updateDB(point)
 
     def updateDB(self, point):
@@ -56,7 +56,7 @@ class RefreshFromPPP():
             WHERE cod_ponto='{cod_ponto}'
             '''.format(**point))
             self.conn.commit()
-    
+
     @staticmethod
     def evaluateCoords(lat, lon):
         lat_deg, lat_min, lat_seg = re.findall(r'(.{2,3})°(\d\d)´(.{7})', lat)[0]
@@ -66,7 +66,7 @@ class RefreshFromPPP():
             new_lat = float(lat_deg) + float(lat_min)/60 + float(lat_seg.replace(',', '.'))/3600
         else:
             new_lat = float(lat_deg) - float(lat_min)/60 - float(lat_seg.replace(',', '.'))/3600
-        
+
         if float(lon_deg) > 0:
             new_lon = float(lon_deg) + float(lon_min)/60 + float(lon_seg.replace(',', '.'))/3600
         else:
