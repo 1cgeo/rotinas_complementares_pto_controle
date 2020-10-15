@@ -72,7 +72,7 @@ class GenerateMonograpy():
         if not folders:
             raise Exception('Os pontos da pasta não foram localizados no banco de pontos.')
         for folder in folders:
-            self.executeProcess(folders.pop())
+            self.executeProcess(folder)
         
     def getListOfPoints(self):
         data = self.fetchAll()
